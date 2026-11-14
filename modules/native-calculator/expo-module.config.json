@@ -1,0 +1,9 @@
+{
+  "platforms": ["apple", "android", "web"],
+  "apple": {
+    "modules": ["NativeCalculatorModule"]
+  },
+  "android": {
+    "modules": ["expo.modules.nativecalculator.NativeCalculatorModule"]
+  }
+}
