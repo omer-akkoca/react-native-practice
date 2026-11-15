@@ -1,4 +1,4 @@
-import { requireNativeModule } from "expo-modules-core";
+import { NativeModule, requireNativeModule } from "expo-modules-core";
 
 type NativeCalculatorModuleType = {
   add(a: number, b: number): number;
@@ -6,8 +6,12 @@ type NativeCalculatorModuleType = {
   isEven(number: number): boolean;
   getDeviceName(): string;
   getDeviceInfo(): Promise<string>;
+  onCounterUpdated: (event: { count: number }) => void;
 };
 
-export default requireNativeModule<NativeCalculatorModuleType>(
-  "NativeCalculator",
-);
+declare class NativeCalculatorModule extends NativeModule<NativeCalculatorModuleType> {
+  startCounter(): void;
+  stopCounter(): void;
+}
+
+export default requireNativeModule<NativeCalculatorModule>("NativeCalculator");

@@ -1,7 +1,6 @@
+import { Colors } from "@/constants/theme";
 import { NativeTabs } from "expo-router/native-tabs";
 import { useColorScheme } from "react-native";
-
-import { Colors } from "@/constants/theme";
 
 export default function AppTabs() {
   const scheme = useColorScheme();
@@ -15,18 +14,14 @@ export default function AppTabs() {
     >
       <NativeTabs.Trigger name="index">
         <NativeTabs.Trigger.Label>Home</NativeTabs.Trigger.Label>
-        <NativeTabs.Trigger.Icon
-          src={require("@/assets/images/tabIcons/home.png")}
-          renderingMode="template"
-        />
       </NativeTabs.Trigger>
 
       <NativeTabs.Trigger name="calculator">
         <NativeTabs.Trigger.Label>Calculator</NativeTabs.Trigger.Label>
-        <NativeTabs.Trigger.Icon
-          src={require("@/assets/images/tabIcons/explore.png")}
-          renderingMode="template"
-        />
+      </NativeTabs.Trigger>
+
+      <NativeTabs.Trigger name="counter">
+        <NativeTabs.Trigger.Label>Counter</NativeTabs.Trigger.Label>
       </NativeTabs.Trigger>
     </NativeTabs>
   );

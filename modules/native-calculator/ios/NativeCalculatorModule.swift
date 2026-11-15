@@ -1,35 +1,60 @@
 import ExpoModulesCore
-import UIKit
+import Foundation
 
 public class NativeCalculatorModule: Module {
-  public func definition() -> ModuleDefinition {
-    Name("NativeCalculator")
+    private var timer: Timer?
+    private var counter = 0
 
-    Function("add") { (a: Int, b: Int) -> Int in
-      return a + b
+    public func definition() -> ModuleDefinition {
+        Name("NativeCalculator")
+
+        Events("onCounterUpdated")
+
+        Function("startCounter") {
+            DispatchQueue.main.async {
+                guard self.timer == nil else { return }
+
+                self.counter = 0
+
+                let timer = Timer(
+                    timeInterval: 1.0,
+                    repeats: true
+                ) { [weak self] _ in
+                    guard let self = self else { return }
+
+                    self.counter += 1
+
+                    self.sendEvent("onCounterUpdated", [
+                        "count": self.counter
+                    ])
+                }
+
+                self.timer = timer
+                RunLoop.main.add(timer, forMode: .common)
+            }
+        }
+
+        Function("stopCounter") {
+            DispatchQueue.main.async {
+                self.stopTimer()
+            }
+        }
+
+        OnStopObserving {
+            DispatchQueue.main.async {
+                self.stopTimer()
+            }
+        }
+
+        OnDestroy {
+            DispatchQueue.main.async {
+                self.stopTimer()
+            }
+        }
     }
 
-    Function("multiply") { (a: Int, b: Int) -> Int in
-      return a * b
+    private func stopTimer() {
+        timer?.invalidate()
+        timer = nil
     }
-
-    Function("isEven") { (number: Int) -> Bool in
-      return number % 2 == 0
-    }
-
-    Function("getDeviceName") { () -> String in
-      return "\(UIDevice.current.name) - \(UIDevice.current.model)"
-    }
-
-    AsyncFunction("getDeviceInfo") { () async throws -> String in
-      var deviceInfo = ""
-      try await Task.sleep(for: .seconds(2))
-      deviceInfo += "Device Name: \(UIDevice.current.name)\n"
-      deviceInfo += "Device Model: \(UIDevice.current.model)\n"
-      deviceInfo += "System Version: \(UIDevice.current.systemVersion)\n"
-      return deviceInfo
-    }
-
-
-  }
 }
