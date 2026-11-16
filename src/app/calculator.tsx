@@ -53,6 +53,10 @@ const Calculator = () => {
         {loading && <Text>Loading...</Text>}
         {deviceInfo && <Text>{deviceInfo}</Text>}
       </HStack>
+      <Button
+        title="Light Haptic"
+        onPress={() => NativeCalculator.triggerHaptic("light")}
+      />
     </View>
   );
 };

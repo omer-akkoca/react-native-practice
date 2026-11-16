@@ -51,6 +51,25 @@ public class NativeCalculatorModule: Module {
                 self.stopTimer()
             }
         }
+
+        Function("triggerHaptic") { (style: String) in
+          DispatchQueue.main.async {
+          let feedbackStyle: UIImpactFeedbackGenerator.FeedbackStyle
+
+          switch style {
+          case "light":
+              feedbackStyle = .light
+          case "heavy":
+              feedbackStyle = .heavy
+          default:
+              feedbackStyle = .medium
+          }
+
+          let generator = UIImpactFeedbackGenerator(style: feedbackStyle)
+          generator.impactOccurred()
+
+        }
+      }
     }
 
     private func stopTimer() {
